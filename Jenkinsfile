@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        
+
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/Laxmi7676/java-cicd-app.git'
@@ -16,13 +16,13 @@ pipeline {
 
         stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh "${tool 'MAVEN_HOME'}/bin/mvn clean package -DskipTests"
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:latest .'
+                sh "docker build -t ${IMAGE_NAME}:latest ."
             }
         }
 
@@ -34,10 +34,9 @@ pipeline {
 
         stage('Push Image to DockerHub') {
             steps {
-                sh 'docker push ${IMAGE_NAME}:latest'
+                sh "docker push ${IMAGE_NAME}:latest"
             }
         }
-
     }
 
     post {
